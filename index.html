@@ -84,6 +84,7 @@ tr:last-child td{border-bottom:0}
 .klein{color:var(--leise);font-size:13px;white-space:nowrap}
 tr.marke td{background:var(--linde);color:var(--papier);font-weight:650;padding:9px 12px}
 tr.nach td{opacity:.62}
+.berater{font-size:14px;color:var(--leise)}.berater strong{color:var(--tinte)}.klein-knopf{font:inherit;font-size:13px;padding:3px 8px;border:1px solid var(--linie);border-radius:5px;background:var(--flaeche);cursor:pointer}
 select.erg{padding:5px 6px;border:1px solid var(--linie);border-radius:5px;background:var(--flaeche);max-width:150px}
 .text{background:var(--flaeche);border:1px solid var(--linie);border-radius:8px;padding:18px 22px;margin-bottom:16px}
 .text blockquote{margin:6px 0 12px;padding:2px 0 2px 14px;border-left:3px solid var(--linde)}
@@ -103,6 +104,7 @@ select.erg{padding:5px 6px;border:1px solid var(--linie);border-radius:5px;backg
       <h1>Haushalts-Navigator 2032</h1>
       <div class="unter">Anrufliste für die Kampagne «Fitness-Check 2032», Thurlindner Kantonalbank</div>
     </div>
+    <div class="berater" id="berater-box"><span id="berater-name"></span> <button type="button" id="berater-wechsel" class="klein-knopf">Berater ändern</button></div>
     <div class="laden">
       <label class="drop" id="drop" tabindex="0">Kandidaten-Datei (CSV) hierher ziehen oder auswählen
         <input type="file" id="datei" accept=".csv,text/csv" hidden>
@@ -152,7 +154,7 @@ select.erg{padding:5px 6px;border:1px solid var(--linie);border-radius:5px;backg
       </div>
       <p class="rueck" id="rueck"></p>
       <div class="tabelle"><table>
-        <thead><tr><th class="num">Rang</th><th>Haushalt</th><th class="num">Bundessteuer ab 2032</th><th class="num">Chance Termin</th><th>Begründung</th><th>Kanal</th><th>Hypothek</th><th>Depot</th><th class="num">Berater&shy;kontakte<br>12 Monate</th><th>Ergebnis</th></tr></thead>
+        <thead><tr><th class="num">Rang</th><th>Haushalt</th><th class="num">Bundessteuer ab 2032</th><th class="num">Chance Termin</th><th>Begründung</th><th>Kanal</th><th>Hypothek</th><th>Depot</th><th class="num">Berater&shy;kontakte<br>12 Monate</th><th>Ergebnis</th><th>Berater</th></tr></thead>
         <tbody id="tb-liste"></tbody>
       </table></div>
     </section>
@@ -1200,6 +1202,35 @@ function depotStufe(v){ if(v===null) return '–'; if(v<50000) return 'unter 50�
   try{ ergebnisse=JSON.parse(localStorage.getItem('tlkb-ergebnisse-v1')||'{}')||{}; }catch(e){ ergebnisse={}; }
   function speichern(){ try{ localStorage.setItem('tlkb-ergebnisse-v1',JSON.stringify(ergebnisse)); }catch(e){} }
 
+  // Beraterlogik: Der Browser kann den Windows-Benutzer nicht auslesen. Darum wird jeder Computer
+  // (genauer: jeder Browser) einmal einem Berater zugeordnet. Wer hier ein Ergebnis einträgt, ist dieser Berater.
+  let zuordnung={}, berater='';
+  try{ zuordnung=JSON.parse(localStorage.getItem('tlkb-zuordnung-v1')||'{}')||{}; }catch(e){ zuordnung={}; }
+  try{ berater=localStorage.getItem('tlkb-berater-v1')||''; }catch(e){ berater=''; }
+  function speichereZuordnung(){ try{ localStorage.setItem('tlkb-zuordnung-v1',JSON.stringify(zuordnung)); }catch(e){} }
+  function beraterAnzeigen(){
+    const n=$('#berater-name'); n.replaceChildren();
+    if(berater){ n.append('Angemeldet als '); n.appendChild(el('strong',null,berater)); } else n.append('Kein Berater gewählt');
+  }
+  function beraterFragen(){
+    const eingabe=window.prompt('Name oder Kürzel des Beraters an diesem Computer:', berater);
+    if(eingabe===null) return !!berater;
+    const n=eingabe.trim().replace(/\s+/g,' ').slice(0,40);
+    if(!n) return !!berater;
+    berater=n; try{ localStorage.setItem('tlkb-berater-v1',berater); }catch(e){}
+    beraterAnzeigen(); return true;
+  }
+  // true, wenn der aktuelle Berater den Fall bearbeiten darf (neu zugeordnet oder bewusst übernommen)
+  function zuordnen(id){
+    if(!berater && !beraterFragen()) return false;
+    const z=zuordnung[id];
+    if(z && z.berater!==berater){
+      if(!window.confirm('Dieser Haushalt ('+id+') gehört '+z.berater+'. Trotzdem '+berater+' zuordnen?')) return false;
+    }
+    zuordnung[id]={berater:berater, zeit:new Date().toISOString()};
+    speichereZuordnung(); return true;
+  }
+
   function el(tag,attrs,text){ const e=document.createElement(tag); if(attrs) for(const k in attrs){ if(k==='class') e.className=attrs[k]; else e.setAttribute(k,attrs[k]); } if(text!==undefined) e.textContent=text; return e; }
 
   function laden(text,name){
@@ -1246,7 +1277,7 @@ function depotStufe(v){ if(v===null) return '–'; if(v<50000) return 'unter 50�
   function liste(){
     const tb=$('#tb-liste'); tb.replaceChildren();
     const m=marke(daten.liste,ziel); const nur=$('#nur-bis').checked;
-    if(!daten.liste.length){ const tr=el('tr'); tr.appendChild(el('td',{colspan:'10'},'Kein Haushalt in dieser Datei zahlt geschätzt 500 Franken oder mehr zusätzlich.')); tb.appendChild(tr); }
+    if(!daten.liste.length){ const tr=el('tr'); tr.appendChild(el('td',{colspan:'11'},'Kein Haushalt in dieser Datei zahlt geschätzt 500 Franken oder mehr zusätzlich.')); tb.appendChild(tr); }
     daten.liste.forEach((h,i)=>{
       if(nur && i>=m.n) return;
       const tr=el('tr'); if(i>=m.n) tr.className='nach';
@@ -1261,16 +1292,21 @@ function depotStufe(v){ if(v===null) return '–'; if(v<50000) return 'unter 50�
       tr.appendChild(el('td',{class:'num'},h.bk===null?'–':fmt.format(h.bk)));
       const td=el('td'); const sel=el('select',{class:'erg','aria-label':'Ergebnis für '+h.id});
       for(const [v,t] of ERG){ const o=el('option',{value:v},t); if((ergebnisse[h.id]||'offen')===v) o.selected=true; sel.appendChild(o); }
-      sel.addEventListener('change',()=>{ if(sel.value==='offen') delete ergebnisse[h.id]; else ergebnisse[h.id]=sel.value; speichern(); rueck(); });
-      td.appendChild(sel); tr.appendChild(td);
+      const tdB=el('td',{class:'klein'},zuordnung[h.id]?zuordnung[h.id].berater:'–');
+      sel.addEventListener('change',()=>{
+        if(!zuordnen(h.id)){ sel.value=ergebnisse[h.id]||'offen'; return; }
+        if(sel.value==='offen') delete ergebnisse[h.id]; else ergebnisse[h.id]=sel.value;
+        speichern(); tdB.textContent=zuordnung[h.id].berater; rueck();
+      });
+      td.appendChild(sel); tr.appendChild(td); tr.appendChild(tdB);
       tb.appendChild(tr);
       if(i===m.n-1 && !m.nichtErreicht){
         const mr=el('tr',{class:'marke'});
-        mr.appendChild(el('td',{colspan:'10'},'Marke: Bis hier sind '+fmt.format(ziel)+' Termine erwartet, aus '+fmt.format(m.n)+' Anrufen.'));
+        mr.appendChild(el('td',{colspan:'11'},'Marke: Bis hier sind '+fmt.format(ziel)+' Termine erwartet, aus '+fmt.format(m.n)+' Anrufen.'));
         tb.appendChild(mr);
       }
     });
-    if(m.nichtErreicht && daten.liste.length){ const mr=el('tr',{class:'marke'}); mr.appendChild(el('td',{colspan:'10'},'Das Ziel von '+fmt.format(ziel)+' Terminen ist mit diesen Kandidaten nicht erreichbar. Erwartet sind rund '+fmt.format(Math.round(m.erwartet))+' Termine.')); tb.appendChild(mr); }
+    if(m.nichtErreicht && daten.liste.length){ const mr=el('tr',{class:'marke'}); mr.appendChild(el('td',{colspan:'11'},'Das Ziel von '+fmt.format(ziel)+' Terminen ist mit diesen Kandidaten nicht erreichbar. Erwartet sind rund '+fmt.format(Math.round(m.erwartet))+' Termine.')); tb.appendChild(mr); }
     rueck();
   }
 
@@ -1310,8 +1346,8 @@ function depotStufe(v){ if(v===null) return '–'; if(v<50000) return 'unter 50�
   }
   $('#export-liste').addEventListener('click',e=>{
     const m=marke(daten.liste,ziel);
-    const z=[['rang','haushalt_id','bundessteuer_delta_geschaetzt_chf','wahrscheinlich_von','wahrscheinlich_bis','chance_termin_prozent','begruendung','kanal','hypothek','depot','beraterkontakte_12m','bis_zur_marke','ergebnis']];
-    for(const h of daten.liste) z.push([h.rang,h.id,r100(h.delta),r100(h.von),r100(h.bis),Math.round(h.chance*100),begruendung(h),'Telefon',h.hyp===null?'':(h.hyp?'ja':'nein'),depotStufe(h.dep),h.bk===null?'':h.bk,h.rang<=m.n?'ja':'nein',(ERG.find(x=>x[0]===(ergebnisse[h.id]||'offen'))||ERG[0])[1]]);
+    const z=[['rang','haushalt_id','bundessteuer_delta_geschaetzt_chf','wahrscheinlich_von','wahrscheinlich_bis','chance_termin_prozent','begruendung','kanal','hypothek','depot','beraterkontakte_12m','bis_zur_marke','ergebnis','berater']];
+    for(const h of daten.liste) z.push([h.rang,h.id,r100(h.delta),r100(h.von),r100(h.bis),Math.round(h.chance*100),begruendung(h),'Telefon',h.hyp===null?'':(h.hyp?'ja':'nein'),depotStufe(h.dep),h.bk===null?'':h.bk,h.rang<=m.n?'ja':'nein',(ERG.find(x=>x[0]===(ergebnisse[h.id]||'offen'))||ERG[0])[1],zuordnung[h.id]?zuordnung[h.id].berater:'']);
     speichereDatei('Anrufliste_Fitness-Check_2032.csv',z,e.currentTarget);
   });
   $('#export-info').addEventListener('click',e=>{
@@ -1319,6 +1355,9 @@ function depotStufe(v){ if(v===null) return '–'; if(v<50000) return 'unter 50�
     for(const h of daten.info) z.push([h.id,r100(h.delta),'Brief oder E-Banking']);
     speichereDatei('Versandliste_Information_2032.csv',z,e.currentTarget);
   });
+  $('#berater-wechsel').addEventListener('click',beraterFragen);
+  beraterAnzeigen();
+
   function knoepfe(){ $('#export-liste').disabled=!daten; $('#export-info').disabled=!daten; }
 
   $('#ziel').addEventListener('change',()=>{ const v=parseInt($('#ziel').value,10); if(v>0){ ziel=v; bilanz(); liste(); } else { $('#ziel').value=ziel; } });
