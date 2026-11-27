@@ -85,6 +85,40 @@ tr:last-child td{border-bottom:0}
 tr.marke td{background:var(--linde);color:var(--papier);font-weight:650;padding:9px 12px}
 tr.nach td{opacity:.62}
 .berater{font-size:14px;color:var(--leise)}.berater strong{color:var(--tinte)}.klein-knopf{font:inherit;font-size:13px;padding:3px 8px;border:1px solid var(--linie);border-radius:5px;background:var(--flaeche);cursor:pointer}
+.kopf-rechts{display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+.knopf-crm{font:inherit;font-weight:600;font-size:14px;padding:8px 14px;border:0;border-radius:8px;color:#fff;background:linear-gradient(135deg,#2F6B4F,#2D5D86);cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.knopf-crm:hover{filter:brightness(1.08)}
+dialog.pop{border:1px solid var(--linie);border-radius:14px;background:var(--flaeche);color:var(--tinte);padding:26px 28px;max-width:380px;box-shadow:0 12px 40px rgba(0,0,0,.25)}
+dialog.pop::backdrop{background:rgba(10,20,15,.45)}
+dialog.pop h2{margin:0 0 8px}
+.dash-kopf{display:flex;flex-wrap:wrap;gap:10px 24px;align-items:center;justify-content:space-between;margin-bottom:16px}
+.dash-kopf h2{margin:0;font-size:22px}
+.dash-kopf .monat{color:var(--leise);text-transform:capitalize}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin-bottom:16px}
+.kpi{position:relative;background:var(--flaeche);border:1px solid var(--linie);border-radius:14px;padding:16px 18px 16px;overflow:hidden}
+.kpi::before{content:"";position:absolute;left:0;top:0;right:0;height:5px;background:var(--k,var(--linde))}
+.kpi .titel{color:var(--leise);font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+.kpi .gross{font-size:38px;font-weight:700;line-height:1.1;margin:6px 0 2px;color:var(--k,var(--linde));font-variant-numeric:tabular-nums}
+.kpi .gross.text{font-size:26px;padding:6px 0 4px}
+.kpi .sub{color:var(--leise);font-size:13px}
+.dash-grid{display:grid;grid-template-columns:minmax(260px,1fr) minmax(320px,2fr);gap:14px}
+@media(max-width:820px){.dash-grid{grid-template-columns:1fr}}
+@media(max-width:480px){.dbal{grid-template-columns:70px 1fr 28px;font-size:13px}.karte{padding:14px}}
+.karte{background:var(--flaeche);border:1px solid var(--linie);border-radius:14px;padding:18px 20px}
+.karte h3{margin:0 0 14px}
+.donut{width:170px;height:170px;border-radius:50%;margin:4px auto 14px;display:grid;place-items:center}
+.donut>div{width:112px;height:112px;border-radius:50%;background:var(--flaeche);display:grid;place-items:center;text-align:center;line-height:1.15}
+.donut b{font-size:28px;display:block}.donut span{font-size:12px;color:var(--leise)}
+.dleg{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;font-size:13px;color:var(--leise)}
+.dleg i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.dbal{display:grid;grid-template-columns:110px 1fr 44px;gap:8px 10px;align-items:center;font-size:14px}
+.dbal .name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dbal .name.top{font-weight:700;color:var(--linde)}
+.dbal .spur{display:flex;height:18px;background:var(--grau-hell);border-radius:9px;overflow:hidden}
+.dbal .spur span{display:block;height:100%}
+.dbal .wert{text-align:right;font-variant-numeric:tabular-nums;color:var(--leise)}
+[hidden]{display:none!important}
+.dash-leer{color:var(--leise);padding:20px 0}
 select.erg{padding:5px 6px;border:1px solid var(--linie);border-radius:5px;background:var(--flaeche);max-width:150px}
 .text{background:var(--flaeche);border:1px solid var(--linie);border-radius:8px;padding:18px 22px;margin-bottom:16px}
 .text blockquote{margin:6px 0 12px;padding:2px 0 2px 14px;border-left:3px solid var(--linde)}
@@ -104,7 +138,15 @@ select.erg{padding:5px 6px;border:1px solid var(--linie);border-radius:5px;backg
       <h1>Haushalts-Navigator 2032</h1>
       <div class="unter">Anrufliste für die Kampagne «Fitness-Check 2032», Thurlindner Kantonalbank</div>
     </div>
-    <div class="berater" id="berater-box"><span id="berater-name"></span> <button type="button" id="berater-wechsel" class="klein-knopf">Berater ändern</button></div>
+    <div class="kopf-rechts">
+      <button type="button" class="knopf-crm" id="crm-knopf">Connect to TLKB CRM</button>
+      <div class="berater" id="berater-box"><span id="berater-name"></span> <button type="button" id="berater-wechsel" class="klein-knopf">Berater ändern</button></div>
+    </div>
+    <dialog class="pop" id="crm-popup">
+      <h2>TLKB CRM</h2>
+      <p>Dummy Function for MVP</p>
+      <button type="button" class="knopf-crm" id="crm-zu">Schliessen</button>
+    </dialog>
     <div class="laden">
       <label class="drop" id="drop" tabindex="0">Kandidaten-Datei (CSV) hierher ziehen oder auswählen
         <input type="file" id="datei" accept=".csv,text/csv" hidden>
@@ -124,6 +166,7 @@ select.erg{padding:5px 6px;border:1px solid var(--linie);border-radius:5px;backg
     <h2>Noch keine Kandidaten geladen</h2>
     <p>Zieht die Kandidaten-Datei des Monats in das Feld oben. Die Datei wird nur in diesem Browser gelesen und nirgends hochgeladen.</p>
     <p>Für die Vorführung lädt «Testhaushalte laden» 900 Haushalte aus der Testwelle, die das Modell beim Lernen nie gesehen hat.</p>
+    <p><a href="#management">Management-Übersicht ansehen</a></p>
   </div>
 
   <div id="inhalt" hidden>
@@ -141,9 +184,34 @@ select.erg{padding:5px 6px;border:1px solid var(--linie);border-radius:5px;backg
     <nav class="tabs" aria-label="Ansichten">
       <a href="#anrufliste" data-view="anrufliste">Anrufliste</a>
       <a href="#information" data-view="information">Information statt Beratung</a>
+      <a href="#management" data-view="management">Management-Übersicht</a>
       <a href="#leitfaden" data-view="leitfaden">Gesprächsleitfaden</a>
       <a href="#methode" data-view="methode">So rechnet das Tool</a>
     </nav>
+
+    <section data-panel="management" hidden>
+      <div class="dash-kopf">
+        <h2>Management-Übersicht <span class="monat" id="dash-monat"></span></h2>
+        <label><input type="checkbox" id="dash-demo"> Beispieldaten zeigen (erfunden)</label>
+      </div>
+      <div class="kpis">
+        <div class="kpi" style="--k:var(--hinweis)"><div class="titel">Beratungen offen</div><div class="gross" id="k-offen">–</div><div class="sub" id="k-offen-s"></div></div>
+        <div class="kpi" style="--k:var(--linde)"><div class="titel">Beratungen erledigt</div><div class="gross" id="k-erledigt">–</div><div class="sub" id="k-erledigt-s"></div></div>
+        <div class="kpi" style="--k:var(--weniger)"><div class="titel">Leads generiert</div><div class="gross" id="k-leads">–</div><div class="sub" id="k-leads-s"></div></div>
+        <div class="kpi" style="--k:var(--mehr)"><div class="titel">Meiste Gespräche</div><div class="gross text" id="k-top">–</div><div class="sub" id="k-top-s"></div></div>
+      </div>
+      <div class="dash-grid">
+        <div class="karte"><h3>Fortschritt im Monat</h3>
+          <div class="donut" id="d-donut"><div><div><b id="d-pct">0 %</b><span>erledigt</span></div></div></div>
+          <div class="dleg"><span><i style="background:var(--linde)"></i>erledigt</span><span><i style="background:var(--grau-hell);border:1px solid var(--grau)"></i>offen</span></div>
+        </div>
+        <div class="karte"><h3>Gespräche je Berater</h3>
+          <div class="dleg" style="justify-content:flex-start;margin:-6px 0 12px"><span><i style="background:var(--linde)"></i>Lead (Termin)</span><span><i style="background:var(--weniger)"></i>Gespräch ohne Termin</span></div>
+          <div class="dbal" id="d-balken"></div>
+        </div>
+      </div>
+      <p class="klein" style="margin-top:14px" id="dash-hinweis"></p>
+    </section>
 
     <section data-panel="anrufliste">
       <div class="steuer">
@@ -1245,7 +1313,7 @@ function depotStufe(v){ if(v===null) return '–'; if(v<50000) return 'unter 50�
     if(daten.unvollst) s+=' '+fmt.format(daten.unvollst)+' Zeilen waren unvollständig und wurden nicht bewertet.';
     $('#status').textContent=s;
     $('#m-alter').textContent = daten.alterErgaenzt ? 'Bei '+fmt.format(daten.alterErgaenzt)+' Haushalten fehlte das Alter; dort rechnet das Tool mit dem Durchschnitt der Testwelle (48 Jahre).' : '';
-    $('#leer').hidden=true; $('#inhalt').hidden=false;
+    $('#leer').hidden=true; $('#inhalt').hidden=false; { const b=document.querySelector('#inhalt .bilanz'); if(b) b.hidden=false; }
     alles();
   }
 
@@ -1355,6 +1423,48 @@ function depotStufe(v){ if(v===null) return '–'; if(v<50000) return 'unter 50�
     for(const h of daten.info) z.push([h.id,r100(h.delta),'Brief oder E-Banking']);
     speichereDatei('Versandliste_Information_2032.csv',z,e.currentTarget);
   });
+  // Management-Übersicht: rechnet aus den Einträgen dieses Browsers (Ergebnis + Zuordnung), nur Einträge des laufenden Monats.
+  const DEMO_BERATER=[['Keller',9,22,6],['Meier',7,19,8],['Brunner',8,15,5],['Weber',6,17,7],['Frei',5,16,4],['Huber',6,12,6],['Steiner',4,13,5],['Gerber',5,10,4],['Moser',3,11,6],['Baumann',4,8,3],['Zimmermann',3,9,5],['Graf',2,8,4],['Schmid',2,6,3],['Fischer',1,5,2]];
+  function dashDaten(demo){
+    const b={}; let geplant=0;
+    if(demo){ for(const [n,t,k,x] of DEMO_BERATER) b[n]={lead:t,gespr:t+k,nicht:x}; geplant=380; }
+    else{
+      if(daten) geplant=marke(daten.liste,ziel).n;
+      const jetzt=new Date(), ids=daten?new Set(daten.liste.map(h=>h.id)):new Set();
+      for(const id in ergebnisse){
+        const z=zuordnung[id]; if(!z||!ids.has(id)) continue;
+        const d=new Date(z.zeit); if(d.getFullYear()!==jetzt.getFullYear()||d.getMonth()!==jetzt.getMonth()) continue;
+        const o=b[z.berater]||(b[z.berater]={lead:0,gespr:0,nicht:0}), e=ergebnisse[id];
+        if(e==='termin'){ o.lead++; o.gespr++; } else if(e==='kein') o.gespr++; else if(e==='nicht') o.nicht++;
+      }
+    }
+    let erledigt=0, leads=0; for(const n in b){ erledigt+=b[n].gespr+b[n].nicht; leads+=b[n].lead; }
+    return {b, geplant:Math.max(geplant,erledigt), erledigt, leads};
+  }
+  function dashboard(){
+    const cb=$('#dash-demo'); const demo=cb.checked; const D=dashDaten(demo);
+    $('#dash-monat').textContent=new Date().toLocaleDateString('de-CH',{month:'long',year:'numeric'});
+    const offen=D.geplant-D.erledigt, pct=D.geplant?Math.round(100*D.erledigt/D.geplant):0;
+    $('#k-offen').textContent=fmt.format(offen); $('#k-offen-s').textContent='von '+fmt.format(D.geplant)+' geplanten Anrufen bis zur Marke';
+    $('#k-erledigt').textContent=fmt.format(D.erledigt); $('#k-erledigt-s').textContent=pct+' % des Monatsziels';
+    $('#k-leads').textContent=fmt.format(D.leads); $('#k-leads-s').textContent=D.erledigt?fmt.format(Math.round(100*D.leads/D.erledigt))+' % der Anrufe führen zu einem Termin':'noch keine Anrufe eingetragen';
+    const namen=Object.keys(D.b).sort((a,c)=>D.b[c].gespr-D.b[a].gespr||a.localeCompare(c));
+    const top=namen[0]&&D.b[namen[0]].gespr>0?namen[0]:null;
+    $('#k-top').textContent=top||'–'; $('#k-top-s').textContent=top?fmt.format(D.b[top].gespr)+' Gespräche, davon '+fmt.format(D.b[top].lead)+' Leads':'noch keine Gespräche';
+    $('#d-donut').style.background='conic-gradient(var(--linde) 0 '+pct+'%, var(--grau-hell) '+pct+'% 100%)'; $('#d-pct').textContent=pct+' %';
+    const bal=$('#d-balken'); bal.replaceChildren();
+    if(!namen.length){ const p=el('div',{class:'dash-leer'},'Noch keine Einträge in diesem Monat. Ergebnisse in der Anrufliste eintragen oder «Beispieldaten zeigen» anklicken.'); p.style.gridColumn='1 / -1'; bal.appendChild(p); }
+    const max=Math.max(1,...namen.map(n=>D.b[n].gespr));
+    for(const n of namen){ const o=D.b[n];
+      bal.appendChild(el('div',{class:'name'+(n===top?' top':''),title:n},n));
+      const sp=el('div',{class:'spur'}); const a=el('span'); a.style.cssText='width:'+(100*o.lead/max)+'%;background:var(--linde)'; const c=el('span'); c.style.cssText='width:'+(100*(o.gespr-o.lead)/max)+'%;background:var(--weniger)'; sp.append(a,c); bal.appendChild(sp);
+      bal.appendChild(el('div',{class:'wert'},String(o.gespr)));
+    }
+    $('#dash-hinweis').textContent=demo?'Beispieldaten: alle Zahlen sind erfunden.':'Die Zahlen stammen aus den Einträgen in diesem Browser. Eine gemeinsame Ablage für alle Berater folgt im Pilot. Ein Gespräch ist ein Anruf mit Termin oder «kein Interesse»; «nicht erreicht» zählt als erledigt, aber nicht als Gespräch.';
+  }
+  $('#dash-demo').addEventListener('change',dashboard);
+  $('#crm-knopf').addEventListener('click',()=>{ const d=$('#crm-popup'); if(d.showModal) d.showModal(); else window.alert('Dummy Function for MVP'); });
+  $('#crm-zu').addEventListener('click',()=>$('#crm-popup').close());
   $('#berater-wechsel').addEventListener('click',beraterFragen);
   beraterAnzeigen();
 
@@ -1371,8 +1481,13 @@ function depotStufe(v){ if(v===null) return '–'; if(v<50000) return 'unter 50�
   drop.addEventListener('drop',e=>{ const f=e.dataTransfer.files[0]; if(f) f.text().then(t=>laden(t,f.name)); });
   document.addEventListener('dragover',e=>e.preventDefault()); document.addEventListener('drop',e=>e.preventDefault());
 
-  const VIEWS=['anrufliste','information','leitfaden','methode'];
-  function zeige(){ const v=VIEWS.includes(location.hash.slice(1))?location.hash.slice(1):'anrufliste';
+  const VIEWS=['anrufliste','information','management','leitfaden','methode'];
+  function zeige(){
+    if(location.hash==='#management') dashboard();
+    // Ohne geladene Kandidaten ist nur die Management-Übersicht (z. B. mit Beispieldaten) erreichbar.
+    if(!daten){ const m=location.hash==='#management'; $('#leer').hidden=m; $('#inhalt').hidden=!m; const b=document.querySelector('#inhalt .bilanz'); if(b) b.hidden=m; }
+    else { const b=document.querySelector('#inhalt .bilanz'); if(b) b.hidden=false; }
+    const v=VIEWS.includes(location.hash.slice(1))?location.hash.slice(1):'anrufliste';
     document.querySelectorAll('[data-panel]').forEach(p=>p.hidden=p.dataset.panel!==v);
     document.querySelectorAll('.tabs a').forEach(a=>{ if(a.dataset.view===v) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current'); }); }
   window.addEventListener('hashchange',zeige); zeige();
