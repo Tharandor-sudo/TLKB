@@ -86,6 +86,14 @@ tr.marke td{background:var(--linde);color:var(--papier);font-weight:650;padding:
 tr.nach td{opacity:.62}
 .berater{font-size:14px;color:var(--leise)}.berater strong{color:var(--tinte)}.klein-knopf{font:inherit;font-size:13px;padding:3px 8px;border:1px solid var(--linie);border-radius:5px;background:var(--flaeche);cursor:pointer}
 select.erg{padding:5px 6px;border:1px solid var(--linie);border-radius:5px;background:var(--flaeche);max-width:150px}
+.erg-zelle{display:flex;flex-direction:column;gap:5px;align-items:flex-start}
+select.bv-wahl{padding:5px 6px;border:1px solid var(--linie);border-radius:5px;background:var(--flaeche);max-width:100%}
+.bv-kurz{background:var(--linde-hell);border-radius:6px;padding:10px 14px;margin:4px 0 12px}
+.bv-kurz p{margin:2px 0}
+.angebote{margin:0 0 10px;padding-left:22px}
+.angebote li{margin:0 0 12px}
+.angebote .warum{color:var(--leise);font-size:14px;margin:2px 0 4px}
+.marker{display:inline-block;font-size:12px;font-weight:600;color:var(--hinweis);background:var(--hinweis-bg);border-radius:4px;padding:1px 6px;margin-left:6px;vertical-align:1px}
 .text{background:var(--flaeche);border:1px solid var(--linie);border-radius:8px;padding:18px 22px;margin-bottom:16px}
 .text blockquote{margin:6px 0 12px;padding:2px 0 2px 14px;border-left:3px solid var(--linde)}
 .text ul{margin:4px 0 10px;padding-left:20px}
@@ -178,7 +186,7 @@ select.erg{padding:5px 6px;border:1px solid var(--linie);border-radius:5px;backg
           <h3>Betroffenheit ansprechen, ohne Zahl</h3>
           <blockquote>«Für manche Paare ändert sich dadurch bei der Bundessteuer spürbar etwas. Nach einer ersten groben Einschätzung könnte das bei Ihnen der Fall sein. Wie stark, können wir seriös nur mit Ihren Unterlagen ausrechnen. Genau dafür gibt es unseren Fitness-Check 2032.»</blockquote>
           <h3>Angebot</h3>
-          <blockquote>«Im Fitness-Check rechnen wir gemeinsam aus, was sich für Sie ändert, und schauen, was Sie bis 2032 schon heute planen können. Er dauert etwa eine Stunde und ist kostenlos. Bringen Sie, wenn möglich, Ihre letzte Steuererklärung und die Lohnausweise mit.»</blockquote>
+          <blockquote>«Im Fitness-Check rechnen wir gemeinsam aus, was sich für Sie ändert, und schauen, was Sie bis 2032 schon heute planen können, zum Beispiel bei der Vorsorge oder beim Sparen. Er dauert etwa eine Stunde und ist kostenlos. Bringen Sie, wenn möglich, Ihre letzte Steuererklärung und die Lohnausweise mit.»</blockquote>
           <h3>Häufige Fragen</h3>
           <ul>
             <li><em>«Wie viel zahlen wir denn mehr?»</em> «Das möchte ich Ihnen nicht aus dem Bauch sagen. Eine falsche Zahl hilft Ihnen nicht. Im Fitness-Check rechnen wir es mit Ihren Unterlagen genau aus.»</li>
@@ -188,7 +196,7 @@ select.erg{padding:5px 6px;border:1px solid var(--linie);border-radius:5px;backg
           <h3>Abschluss</h3>
           <p>Termin festhalten und das Ergebnis in der Anrufliste eintragen.</p>
           <h3>Nicht tun</h3>
-          <p>Keine geschätzte Zahl nennen. Am Telefon keine Steuerberatung. Keine Aussage zu Kantons- oder Gemeindesteuer.</p>
+          <p>Keine geschätzte Zahl nennen. Am Telefon keine Steuerberatung und keine Produkte. Keine Aussage zu Kantons- oder Gemeindesteuer.</p>
         </div>
         <div class="text">
           <h2>Informationstext für Haushalte, die weniger zahlen</h2>
@@ -200,6 +208,22 @@ select.erg{padding:5px 6px;border:1px solid var(--linie);border-radius:5px;backg
           <p>Sie müssen jetzt nichts unternehmen. Wenn Sie wissen möchten, was sich für Sie konkret ändert, ist Ihre Beraterin oder Ihr Berater gerne für Sie da.</p>
           <p>Freundliche Grüsse<br>Thurlindner Kantonalbank</p>
         </div>
+      </div>
+      <div class="text" id="beratung">
+        <h2>Beratung vorbereiten (Fitness-Check)</h2>
+        <p>Für Haushalte mit Termin: passende Angebote als Hilfe für das Gespräch. Sie folgen festen Regeln aus den Bankdaten und ändern den Rang in der Anrufliste nicht.</p>
+        <div class="steuer">
+          <label>Haushalt <select id="bv-haushalt" class="bv-wahl"></select></label>
+          <label><input type="checkbox" id="bv-alle"> alle Haushalte der Anrufliste zeigen</label>
+        </div>
+        <div id="bv-karte"></div>
+        <h3>Nicht tun</h3>
+        <ul>
+          <li>Nicht mit dem Produkt beginnen. Zuerst die Steuer mit den Unterlagen ausrechnen, dann die Angebote.</li>
+          <li>Die geschätzte Zahl aus dem Navigator nicht nennen. Im Gespräch gilt nur die Zahl aus den Unterlagen.</li>
+          <li>Anlageprodukte (Anlageberatung, Fondssparplan) erst nach dem Anlegerprofil.</li>
+          <li>Wenn ein Angebot nicht passt, es weglassen. Die Karte ist ein Vorschlag, keine Pflicht.</li>
+        </ul>
       </div>
     </section>
 
@@ -217,6 +241,7 @@ select.erg{padding:5px 6px;border:1px solid var(--linie);border-radius:5px;backg
           </ul>
           <h3>Welche Daten zählen</h3>
           <p>Für die Rechnung: Zivilstand, Lohn, Rente, Anteil des tieferen Einkommens, Anzahl Kinder, Alter. Hypothek, Depot und Beraterkontakte werden nur angezeigt und beeinflussen den Rang nicht.</p>
+          <p>Die Angebote im Teil «Beratung vorbereiten» folgen festen Wenn-dann-Regeln (Einkommen, Kinder, Alter, Hypothek, Depot). Sie sind ein Vorschlag zur Vorbereitung und ändern den Rang nicht.</p>
           <p class="klein" id="m-alter"></p>
         </div>
         <div class="text">
@@ -1145,7 +1170,7 @@ W12996,Konkubinat,42.8,21149,0,0.0,1,622000,228121,0
 W12997,verheiratet,75.9,0,5701,37.0,0,788000,407242,1</script>
 <script>
 
-const PARAMS = {"reg": {"intercept": -431.9883934254005, "coef": {"lohn": 145.4124631176368, "rente": 101.82466537864683, "anteil": -49.17790726859274, "kinder": -15.512690689403115, "alter": -0.810309104409922}, "mae": 583.4574024002816, "p10": -918.3719110258049, "p90": 900.3045493753895}, "clf": {"intercept": -1.9878276913400614, "coef": {"eb": 0.03551096508741261, "tel": 0.2915125088078988, "konkubinat": -0.8746100318957123, "lohn": 0.14080524244403222, "rente": -0.1532034371160215, "anteil": -0.4531297703468809, "kinder": 0.24428394745880788, "alter": -0.09848425693560013}, "mean": {"eb": 0.3395238095238095, "tel": 0.3485714285714286, "konkubinat": 0.1376190476190476, "lohn": 9.559479047619048, "rente": 1.5935928571428573, "anteil": 29.070619047619047, "kinder": 0.8890476190476191, "alter": 47.731095238095236}, "scale": {"eb": 0.4735476663338649, "tel": 0.47651798261461453, "konkubinat": 0.34449970297733773, "lohn": 6.325402866450036, "rente": 2.8387647225420034, "anteil": 16.670163783513377, "kinder": 1.0289032753924825, "alter": 16.849970177746005}}};
+const PARAMS = {"reg": {"intercept": -431.98839342540305, "coef": {"lohn": 145.41246311763715, "rente": 101.82466537864673, "anteil": -49.1779072685928, "kinder": -15.512690689403172, "alter": -0.810309104409896}, "mae": 583.4574024002817, "p10": -918.371911025805, "p90": 900.3045493753858}, "clf": {"intercept": -1.9878276913400614, "coef": {"eb": 0.03551096508741256, "tel": 0.29151250880789875, "konkubinat": -0.8746100318957123, "lohn": 0.14080524244403222, "rente": -0.15320343711602152, "anteil": -0.4531297703468809, "kinder": 0.2442839474588078, "alter": -0.09848425693560016}, "mean": {"eb": 0.3395238095238095, "tel": 0.3485714285714286, "konkubinat": 0.1376190476190476, "lohn": 9.559479047619048, "rente": 1.5935928571428573, "anteil": 29.070619047619047, "kinder": 0.8890476190476191, "alter": 47.731095238095236}, "scale": {"eb": 0.4735476663338649, "tel": 0.47651798261461453, "konkubinat": 0.34449970297733773, "lohn": 6.325402866450036, "rente": 2.8387647225420034, "anteil": 16.670163783513377, "kinder": 1.0289032753924825, "alter": 16.849970177746005}}};
 const PFLICHT = ['haushalt_id','zivilstand','lohn_total_monat','renten_total_monat','anteil_tieferes_einkommen','anzahl_kinder','alter_mittel'];
 function zahl(v){ if(v===undefined||v===null) return NaN; const s=String(v).replace(/["'’\s]/g,'').replace(',', '.'); if(s==='') return NaN; return Number(s); }
 function parseCSV(text){
@@ -1173,7 +1198,7 @@ function bewerten(rows){
     const chance=1/(1+Math.exp(-z));
     const hyp=zahl(r.hypothek_saldo), dep=zahl(r.depotwert), bk=zahl(r.beraterkontakte_12m);
     let gruppe; if(konk) gruppe='konkubinat'; else if(delta>=500) gruppe='liste'; else if(delta<=-500) gruppe='info'; else gruppe='kaum';
-    out.push({id:String(r.haushalt_id), delta, von:delta+R.p10, bis:delta+R.p90, chance, punkte:Math.max(delta,0)*chance, gruppe, anteil, kinder,
+    out.push({id:String(r.haushalt_id), delta, von:delta+R.p10, bis:delta+R.p90, chance, punkte:Math.max(delta,0)*chance, gruppe, anteil, kinder, lohn, alter,
       hyp:Number.isNaN(hyp)?null:hyp>0, dep:Number.isNaN(dep)?null:dep, bk:Number.isNaN(bk)?null:bk});
   }
   const liste=out.filter(h=>h.gruppe==='liste').sort((a,b)=>b.punkte-a.punkte||(a.id<b.id?-1:1));
@@ -1190,6 +1215,34 @@ function begruendung(h){
   return ek+', '+k+': '+d+(h.chance>=0.5?', gute Chance auf einen Termin.':'.');
 }
 function depotStufe(v){ if(v===null) return '–'; if(v<50000) return 'unter 50’000'; if(v<=250000) return '50’000–250’000'; return 'über 250’000'; }
+
+// Angebote für den Fitness-Check: feste Wenn-dann-Regeln (Team-Entscheid 27.11.2026).
+// Sie dienen nur der Vorbereitung der Beratung und ändern den Rang nicht.
+// Grenzen (20 %, 1'500 CHF, 45 Jahre, 50'000 CHF) sind Faustwerte, vom Team noch zu prüfen.
+const ANGEBOTE=[
+  {nr:'R2', wenn:h=>h.anteil>0&&h.anteil<20, titel:'Eigenes 3a-Konto für die zweite Person',
+   warum:'Ab 2032 wird jede Person einzeln besteuert. Auch ein kleines zweites Einkommen kann eine eigene Säule 3a haben.',
+   frage:'«Haben Sie beide ein eigenes 3a-Konto? Ab 2032 lohnt es sich, das für jede Person einzeln anzuschauen.»'},
+  {nr:'R3', wenn:h=>h.anteil<=0, titel:'Vorsorgeberatung für die Person ohne Einkommen',
+   warum:'Ohne eigenes Einkommen entstehen Vorsorgelücken. Das wird mit der getrennten Steuer sichtbarer.',
+   frage:'«Wie ist die Person ohne eigenes Einkommen heute fürs Alter abgesichert? Möchten Sie das einmal gemeinsam anschauen?»'},
+  {nr:'R1', wenn:h=>h.lohn>0, titel:'Säule 3a voll einzahlen',
+   warum:'Wer ab 2032 mehr Steuer zahlt, spart mit jedem Franken in der Säule 3a mehr.',
+   frage:'«Zahlen Sie heute schon in die Säule 3a ein, und wenn ja, jedes Jahr den vollen Betrag?»'},
+  {nr:'R5', wenn:h=>h.delta>1500&&h.alter>=45, titel:'Vorsorgeberatung mit Pensionskassen-Einkauf',
+   warum:'Ein Einkauf in die Pensionskasse senkt die Steuer, gerade bei hoher Mehrbelastung.',
+   frage:'«Wissen Sie, ob Sie sich in Ihre Pensionskasse einkaufen könnten? Das steht auf Ihrem Vorsorgeausweis.»'},
+  {nr:'R4', wenn:h=>h.hyp===true, titel:'Hypothek überprüfen, indirekte Amortisation über 3a',
+   warum:'Mit getrennter Steuer wird wichtig, wer die Hypothek trägt und wem das Haus gehört.',
+   frage:'«Auf wen läuft die Hypothek, und wem gehört das Haus? Das wird mit der getrennten Steuer wichtig.»'},
+  {nr:'R6', wenn:h=>h.dep!==null&&h.dep>=50000, titel:'Anlageberatung', anlage:true,
+   warum:'Mit getrennter Steuer muss das Vermögen den Personen zugeordnet werden.',
+   frage:'«Sollen wir anschauen, wie Ihr Vermögen auf Sie beide verteilt ist? Für die Anlage selbst machen wir dann zuerst ein Anlegerprofil.»'},
+  {nr:'R7', wenn:h=>h.kinder>0&&(h.dep===null||h.dep<50000), titel:'Fondssparplan', anlage:true,
+   warum:'Für Familien: regelmässig und mit kleinen Beträgen für später sparen.',
+   frage:'«Legen Sie heute regelmässig etwas für später zur Seite? Dafür gibt es auch einfache Sparpläne mit kleinen Beträgen.»'}
+];
+function angebote(h){ return ANGEBOTE.filter(a=>a.wenn(h)).slice(0,3); }
 
 (function(){
   const $=s=>document.querySelector(s);
@@ -1249,7 +1302,47 @@ function depotStufe(v){ if(v===null) return '–'; if(v<50000) return 'unter 50�
     alles();
   }
 
-  function alles(){ bilanz(); liste(); info(); knoepfe(); }
+  function alles(){ bilanz(); liste(); info(); beratung(); knoepfe(); }
+
+  // Beratung vorbereiten: Karte mit passenden Angeboten pro Haushalt (nur Anzeige, kein Export)
+  let bvAuswahl='';
+  function beratung(){
+    if(!daten) return;
+    const alle=$('#bv-alle').checked;
+    const kand=daten.liste.filter(h=>alle||ergebnisse[h.id]==='termin');
+    const s=$('#bv-haushalt'); s.replaceChildren();
+    const karte=$('#bv-karte'); karte.replaceChildren();
+    if(!kand.length){
+      s.disabled=true; s.appendChild(el('option',null,'–'));
+      karte.appendChild(el('p',{class:'klein'},'Noch kein Haushalt mit «Termin vereinbart». Tragt das Ergebnis in der Anrufliste ein oder zeigt alle Haushalte der Anrufliste.'));
+      return;
+    }
+    s.disabled=false;
+    if(!kand.some(h=>h.id===bvAuswahl)) bvAuswahl=kand[0].id;
+    for(const h of kand){ const o=el('option',{value:h.id},'Rang '+h.rang+' · '+h.id+(ergebnisse[h.id]==='termin'?' · Termin':'')); if(h.id===bvAuswahl) o.selected=true; s.appendChild(o); }
+    const h=kand.find(x=>x.id===bvAuswahl);
+    const kurz=el('div',{class:'bv-kurz'});
+    kurz.appendChild(el('p',null,null)).appendChild(el('strong',null,'Haushalt '+h.id+' (Rang '+h.rang+')'));
+    kurz.appendChild(el('p',null,begruendung(h)));
+    kurz.appendChild(el('p',{class:'klein'},'Hypothek: '+(h.hyp===null?'–':(h.hyp?'ja':'nein'))+' · Depot: '+depotStufe(h.dep)));
+    karte.appendChild(kurz);
+    karte.appendChild(el('h3',null,'Passende Angebote'));
+    const ol=el('ol',{class:'angebote'});
+    for(const a of angebote(h)){
+      const li=el('li'); const t=el('strong',null,a.titel); li.appendChild(t);
+      if(a.anlage) li.appendChild(el('span',{class:'marker'},'erst nach Anlegerprofil'));
+      li.appendChild(el('p',{class:'warum'},a.warum));
+      li.appendChild(el('blockquote',null,a.frage));
+      ol.appendChild(li);
+    }
+    karte.appendChild(ol);
+    karte.appendChild(el('p',{class:'klein',style:'white-space:normal'},'Vorschlag aus Bankdaten zur Vorbereitung. Im Gespräch mit den Unterlagen prüfen. Anlageprodukte erst nach der Eignungsprüfung.'));
+  }
+  function zurBeratung(id){
+    bvAuswahl=id; $('#bv-alle').checked=false; beratung();
+    if(location.hash!=='#leitfaden') location.hash='#leitfaden'; else zeige();
+    setTimeout(()=>$('#beratung').scrollIntoView({block:'start'}),0);
+  }
 
   function bilanz(){
     const n=daten.alle.length;
@@ -1293,12 +1386,15 @@ function depotStufe(v){ if(v===null) return '–'; if(v<50000) return 'unter 50�
       const td=el('td'); const sel=el('select',{class:'erg','aria-label':'Ergebnis für '+h.id});
       for(const [v,t] of ERG){ const o=el('option',{value:v},t); if((ergebnisse[h.id]||'offen')===v) o.selected=true; sel.appendChild(o); }
       const tdB=el('td',{class:'klein'},zuordnung[h.id]?zuordnung[h.id].berater:'–');
+      const vorb=el('button',{type:'button',class:'klein-knopf'},'Beratung vorbereiten');
+      vorb.hidden=ergebnisse[h.id]!=='termin';
+      vorb.addEventListener('click',()=>zurBeratung(h.id));
       sel.addEventListener('change',()=>{
         if(!zuordnen(h.id)){ sel.value=ergebnisse[h.id]||'offen'; return; }
         if(sel.value==='offen') delete ergebnisse[h.id]; else ergebnisse[h.id]=sel.value;
-        speichern(); tdB.textContent=zuordnung[h.id].berater; rueck();
+        speichern(); tdB.textContent=zuordnung[h.id].berater; vorb.hidden=sel.value!=='termin'; rueck(); beratung();
       });
-      td.appendChild(sel); tr.appendChild(td); tr.appendChild(tdB);
+      td.className='erg-zelle'; td.appendChild(sel); td.appendChild(vorb); tr.appendChild(td); tr.appendChild(tdB);
       tb.appendChild(tr);
       if(i===m.n-1 && !m.nichtErreicht){
         const mr=el('tr',{class:'marke'});
@@ -1362,6 +1458,8 @@ function depotStufe(v){ if(v===null) return '–'; if(v<50000) return 'unter 50�
 
   $('#ziel').addEventListener('change',()=>{ const v=parseInt($('#ziel').value,10); if(v>0){ ziel=v; bilanz(); liste(); } else { $('#ziel').value=ziel; } });
   $('#nur-bis').addEventListener('change',liste);
+  $('#bv-alle').addEventListener('change',beratung);
+  $('#bv-haushalt').addEventListener('change',e=>{ bvAuswahl=e.target.value; beratung(); });
   $('#demo').addEventListener('click',()=>laden($('#demo-csv').textContent.trim(),'Testhaushalte aus der Testwelle'));
   const drop=$('#drop'), inp=$('#datei');
   drop.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); inp.click(); } });

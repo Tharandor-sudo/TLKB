@@ -53,6 +53,10 @@ immer über `modell/trainieren.py`.
 | – | Regressionszahlen | Die der Musterlösung 4 (nachrechenbar) | Auftragsblatt nennt abweichende Zahlen (165, 450/Kind, 620), die sich nicht nachrechnen lassen |
 | – | Vergleich im Pitch | «Rund 380 Anrufe statt rund 1'130 Kontakte» (zufällig, gemischte Kanäle) | Teamentscheid; Reserve-Antwort: zufällig, alle per Telefon ≈ 870 |
 | – | Block 2 und 3 | Namen, Deutungen und Sätze der Musterlösungen 2 und 3 gelten als unsere | Teamentscheid |
+| 14 | Angebote (27.11.2026) | Pro Haushalt passende Bankangebote als Hilfe für die Beratung; nie am Telefon. Telefonskript nur mit Halbsatz «…, zum Beispiel bei der Vorsorge oder beim Sparen.» | Termin-Chance schützen; Schätzung unsicher; Anlagen brauchen Eignungsprüfung |
+| 14b | Ort der Angebote | Leitfaden, Teil «Beratung vorbereiten»: Haushalte mit «Termin vereinbart» (Umschaltung auf alle); Knopf in der Anrufliste; keine Spalte, nichts im Export | Anrufer sieht keine Produkte; Vermögensdaten bleiben im Browser |
+| 14c | Regeln | R1 Lohn → Säule 3a; R2 Anteil 0–20 % → 3a zweite Person; R3 Anteil 0 % → Vorsorge Person ohne Einkommen; R4 Hypothek → Hypothek / indirekte Amortisation; R5 Delta > 1'500 und Alter ≥ 45 → PK-Einkauf; R6 Depot ≥ 50'000 → Anlageberatung; R7 Kinder und Depot < 50'000 → Fondssparplan. Reihenfolge R2, R3, R1, R5, R4, R6, R7, höchstens 3. Feste Regeln, kein Modell, ändern den Rang nicht | Nachvollziehbar; keine Daten zu Abschlüssen |
+| 14d | Formulierung | Pro Angebot eine Einstiegsfrage; «Nicht tun»: erst Steuer rechnen, keine geschätzte Zahl, Anlagen erst nach Anlegerprofil, Karte ist Vorschlag | Gespräch öffnen statt verkaufen |
 
 ## Kennzahlen (geprüft)
 
@@ -68,3 +72,7 @@ immer über `modell/trainieren.py`.
 - Pilot: gemeinsame Ablage der Ergebnisse für 14 Spezialisten (heute speichert jeder Browser für sich).
 - Pilot: Vergleichsgruppe (z. B. 10 % zufällig gezogene Mehrzahler) beantragen.
 - Kantons- und Gemeindesteuer nachziehen, sobald der Kanton entscheidet.
+- Team bestätigen: Depot löst neu Angebote aus (R6, R7), ändert die Nutzung aus Entscheid 8 (Rang bleibt unberührt).
+- Grenzen der Angebots-Regeln (20 %, 1'500 CHF, 45 Jahre, 50'000 CHF) von Team oder Vorsorge-Fachperson prüfen. Demo (215 Haushalte auf der Liste): R1 auf allen Karten, R3 auf 187; Depot ≥ 50'000 trifft auf 201 zu.
+- Pilot: pro Angebot festhalten, was daraus wurde (nicht angesprochen / kein Interesse / Interesse / abgeschlossen); Übersicht nur mit Summen, ohne Haushalt-Nummern. Braucht gemeinsame Ablage und Vergleichsgruppe.
+- Pilot: prüfen, ob die Termin-Quote mit dem neuen Halbsatz im Telefonskript gleich bleibt.
