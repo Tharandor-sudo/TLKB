@@ -73,15 +73,16 @@ p{margin:0 0 10px;max-width:72ch}
 .rueck{font-size:14px;color:var(--leise);margin:0 0 12px}
 .tabelle{overflow-x:auto;border:1px solid var(--linie);border-radius:8px;background:var(--flaeche)}
 table{border-collapse:collapse;width:100%;font-size:14px}
-th{text-align:left;font-weight:600;color:var(--leise);padding:10px 10px;border-bottom:1px solid var(--linie);white-space:nowrap;background:var(--flaeche)}
-td{padding:9px 10px;border-bottom:1px solid var(--linie);vertical-align:top}
+th{text-align:left;font-weight:600;font-size:13px;color:var(--leise);padding:10px 7px;border-bottom:1px solid var(--linie);background:var(--flaeche)}
+td{padding:9px 7px;border-bottom:1px solid var(--linie);vertical-align:top}
 td.num,th.num{text-align:right;white-space:nowrap}
 tr:last-child td{border-bottom:0}
 .d-mehr{color:var(--mehr);font-weight:650}
 .d-weniger{color:var(--weniger);font-weight:650}
 .band{display:block;color:var(--leise);font-size:12.5px;font-weight:400}
-.begr{min-width:240px;max-width:320px}
-.klein{color:var(--leise);font-size:13px;white-space:nowrap}
+.begr{min-width:120px;max-width:240px}
+th.num{white-space:normal}
+.klein{color:var(--leise);font-size:13px}
 tr.marke td{background:var(--linde);color:var(--papier);font-weight:650;padding:9px 12px}
 tr.nach td{opacity:.62}
 .berater{font-size:14px;color:var(--leise)}.berater strong{color:var(--tinte)}.klein-knopf{font:inherit;font-size:13px;padding:3px 8px;border:1px solid var(--linie);border-radius:5px;background:var(--flaeche);cursor:pointer}
@@ -119,7 +120,8 @@ dialog.pop h2{margin:0 0 8px}
 .dbal .wert{text-align:right;font-variant-numeric:tabular-nums;color:var(--leise)}
 [hidden]{display:none!important}
 .dash-leer{color:var(--leise);padding:20px 0}
-select.erg{padding:5px 6px;border:1px solid var(--linie);border-radius:5px;background:var(--flaeche);max-width:150px}
+select.erg{padding:5px 6px;border:1px solid var(--linie);border-radius:5px;background:var(--flaeche);max-width:130px}
+.erg-zelle .klein-knopf{max-width:130px;white-space:normal;text-align:left}
 .erg-zelle{display:flex;flex-direction:column;gap:5px;align-items:flex-start}
 select.bv-wahl{padding:5px 6px;border:1px solid var(--linie);border-radius:5px;background:var(--flaeche);max-width:100%}
 .bv-kurz{background:var(--linde-hell);border-radius:6px;padding:10px 14px;margin:4px 0 12px}
@@ -1462,7 +1464,7 @@ function angebote(h){ return ANGEBOTE.filter(a=>a.wenn(h)).slice(0,3); }
         if(sel.value==='offen') delete ergebnisse[h.id]; else ergebnisse[h.id]=sel.value;
         speichern(); tdB.textContent=zuordnung[h.id].berater; vorb.hidden=sel.value!=='termin'; rueck(); beratung();
       });
-      td.className='erg-zelle'; td.appendChild(sel); td.appendChild(vorb); tr.appendChild(td); tr.appendChild(tdB);
+      const box=el('div',{class:'erg-zelle'}); box.appendChild(sel); box.appendChild(vorb); td.appendChild(box); tr.appendChild(td); tr.appendChild(tdB);
       tb.appendChild(tr);
       if(i===m.n-1 && !m.nichtErreicht){
         const mr=el('tr',{class:'marke'});
